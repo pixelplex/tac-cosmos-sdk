@@ -1,15 +1,14 @@
 syntax = "proto3";
 package cosmos.staking.v1beta1;
 
+import "amino/amino.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos/staking/v1beta1/staking.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-import "gogoproto/gogo.proto";
-
-import "cosmos_proto/cosmos.proto";
-import "cosmos/base/v1beta1/coin.proto";
-import "cosmos/staking/v1beta1/staking.proto";
-import "cosmos/msg/v1/msg.proto";
-import "amino/amino.proto";
 
 option go_package = "github.com/cosmos/cosmos-sdk/x/staking/types";
 
@@ -39,13 +38,13 @@ service Msg {
   // and delegate back to previous validator.
   rpc CancelUnbondingDelegation(MsgCancelUnbondingDelegation) returns (MsgCancelUnbondingDelegationResponse) {
     option (cosmos_proto.method_added_in) = "cosmos-sdk 0.46";
-  };
+  }
 
   // UpdateParams defines an operation for updating the x/staking module
   // parameters.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse) {
     option (cosmos_proto.method_added_in) = "cosmos-sdk 0.47";
-  };
+  }
 }
 
 // MsgCreateValidator defines a SDK message for creating a new validator.
@@ -195,10 +194,52 @@ message MsgUpdateParams {
   //
   // NOTE: All parameters must be supplied.
   Params params = 2 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
-};
+}
 
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {
   option (cosmos_proto.message_added_in) = "cosmos-sdk 0.47";
-};
+}
+
+// MsgTokenizeShares tokenizes a delegation.
+message MsgTokenizeShares {
+  option (cosmos_proto.message_added_in) = "cosmos-sdk 0.47-lsm";
+  option (cosmos.msg.v1.signer)          = "delegator_address";
+  option (amino.name)                    = "cosmos-sdk/x/staking/MsgTokenizeShares";
+
+  option (gogoproto.equal)           = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string                   delegator_address     = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string                   validator_address     = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount                = 3 [(gogoproto.nullable) = false];
+  string                   tokenized_share_owner = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgTokenizeSharesResponse defines the MsgTokenizeShares response type.
+message MsgTokenizeSharesResponse {
+  option (cosmos_proto.message_added_in) = "cosmos-sdk 0.47-lsm";
+
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgRedeemTokensForShares redeems a tokenized share back into a native delegation.
+message MsgRedeemTokensForShares {
+  option (cosmos_proto.message_added_in) = "cosmos-sdk 0.47-lsm";
+  option (cosmos.msg.v1.signer)          = "delegator_address";
+  option (amino.name)                    = "cosmos-sdk/x/staking/MsgRedeemTokensForShares";
+
+  option (gogoproto.equal)           = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string                   delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.v1beta1.Coin amount            = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgRedeemTokensForSharesResponse defines the MsgRedeemTokensForShares response type.
+message MsgRedeemTokensForSharesResponse {
+  option (cosmos_proto.message_added_in) = "cosmos-sdk 0.47-lsm";
+
+  cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+}
