@@ -31,8 +31,18 @@ const (
 	DefaultHistoricalEntries uint32 = 10000
 )
 
-// DefaultMinCommissionRate is set to 0%
-var DefaultMinCommissionRate = math.LegacyZeroDec()
+var (
+	// ValidatorBondFactor of -1 indicates that it's disabled
+	ValidatorBondCapDisabled = math.LegacyNewDecFromInt(math.NewInt(-1))
+	// DefaultMinCommissionRate is set to 0%
+	DefaultMinCommissionRate = math.LegacyZeroDec()
+	// DefaultValidatorBondFactor is set to -1 (disabled)
+	DefaultValidatorBondFactor = ValidatorBondCapDisabled
+	// DefaultGlobalLiquidStakingCap is set to 100%
+	DefaultGlobalLiquidStakingCap = math.LegacyOneDec()
+	// DefaultValidatorLiquidStakingCap is set to 100%
+	DefaultValidatorLiquidStakingCap = math.LegacyOneDec()
+)
 
 // NewParams creates a new Params instance
 func NewParams(unbondingTime time.Duration, maxValidators, maxEntries, historicalEntries uint32, bondDenom string, minCommissionRate math.LegacyDec) Params {
