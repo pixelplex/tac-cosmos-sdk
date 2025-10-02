@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 
+	"cosmossdk.io/math"
 	sdkmath "cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -38,18 +39,18 @@ func getHistEntries(r *rand.Rand) uint32 {
 }
 
 // getGlobalLiquidStakingCap returns randomized GlobalLiquidStakingCap between 0-1.
-func getGlobalLiquidStakingCap(r *rand.Rand) sdk.Dec {
-	return simulation.RandomDecAmount(r, sdk.OneDec())
+func getGlobalLiquidStakingCap(r *rand.Rand) math.LegacyDec {
+	return simulation.RandomDecAmount(r, math.LegacyOneDec())
 }
 
 // getValidatorLiquidStakingCap returns randomized ValidatorLiquidStakingCap between 0-1.
-func getValidatorLiquidStakingCap(r *rand.Rand) sdk.Dec {
-	return simulation.RandomDecAmount(r, sdk.OneDec())
+func getValidatorLiquidStakingCap(r *rand.Rand) math.LegacyDec {
+	return simulation.RandomDecAmount(r, math.LegacyOneDec())
 }
 
 // getValidatorBondFactor returns randomized ValidatorBondCap between -1 and 300.
-func getValidatorBondFactor(r *rand.Rand) sdk.Dec {
-	return sdk.NewDec(int64(simulation.RandIntBetween(r, -1, 300)))
+func getValidatorBondFactor(r *rand.Rand) math.LegacyDec {
+	return math.LegacyNewDec(int64(simulation.RandIntBetween(r, -1, 300)))
 }
 
 // RandomizedGenState generates a random GenesisState for staking
